@@ -1,13 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>StateZ example</title>
   </head>
   <body>
     <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module">
+      import StateZ from "/src/main.ts";
+      window.StateZ = StateZ;
+      // const initialState = { count: 0 };
+      // const state = new StateZ(initialState);
+
+      // const callback = (value, lastValue, keyName) => {
+      //   console.log(`State changed: ${keyName || ""}`, lastValue, value);
+      // };
+
+      // state.subscribe(callback);
+      // state.set("count", 1);
+      // state.unsubscribe(callback); // Deixa de receber atualizações
+      // state.value = { count: 2 };
+      // console.log(state.get("count"));
+      // console.log(state.value);
+    </script>
   </body>
 </html>

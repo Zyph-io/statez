@@ -1,24 +1,61 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+type Callback = (value: any, lastValue: any, keyName: any) => void;
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+export default class StateZ {
+  #value: any;
+  #callbacks: Callback[] = [];
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+  constructor(value: any) {
+    this.#value = value;
+  }
+
+  get value(): any {
+    return this.#value;
+  }
+
+  set value(newValue: any) {
+    this.triggerCallbacks(newValue, null);
+    this.#value = newValue;
+  }
+
+  set(keyName: string, value: any): void {
+    this.checkObjectType();
+    this.triggerCallbacks(value, keyName);
+    this.#value[keyName] = value;
+  }
+
+  get(keyName: string): any {
+    this.checkObjectType();
+    return this.#value[keyName];
+  }
+
+  subscribe(callback: Callback, trigger = true): void {
+    this.#callbacks.push(callback);
+    if (trigger) {
+      this.triggerCallbacks(this.#value, null);
+    }
+  }
+
+  unsubscribe(callback: Callback): void {
+    const index = this.#callbacks.indexOf(callback);
+    if (index !== -1) {
+      this.#callbacks.splice(index, 1);
+    }
+    console.log("unsubscribe", this.#callbacks);
+  }
+
+  private triggerCallbacks(newValue: any, keyName: any): void {
+    for (const callback of this.#callbacks) {
+      if (keyName) {
+        callback(newValue, this.#value[keyName], keyName);
+      } else {
+        callback(newValue, this.#value, null);
+      }
+    }
+  }
+
+  private checkObjectType(): void {
+    if (typeof this.#value !== "object" || this.#value === null) {
+      throw new Error("State is not an object");
+    }
+  }
+}
