@@ -1,4 +1,4 @@
-declare module "main" {
+declare module "statez" {
     type Callback = (value: any, lastValue: any, keyName: any) => void;
     export default class StateZ {
         #private;
