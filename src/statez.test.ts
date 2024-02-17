@@ -1,4 +1,4 @@
-import StateZ from "./main";
+import StateZ from "./statez";
 
 describe("State Class Tests", () => {
   let initialState: any;
