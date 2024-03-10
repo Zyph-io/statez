@@ -40,7 +40,6 @@ export default class StateZ {
     if (index !== -1) {
       this.#callbacks.splice(index, 1);
     }
-    console.log("unsubscribe", this.#callbacks);
   }
 
   private triggerCallbacks(newValue: any, keyName: any): void {
